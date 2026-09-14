@@ -35,6 +35,7 @@ jobs:
             echo "SITE_URL=https://${OWNER}.github.io/${REPO}" >> "$GITHUB_ENV"
           fi
       - run: npm ci
+      - run: npx astro preferences disable devToolbar
       - run: npm run build
         env:
           SITE_URL: ${{ env.SITE_URL }}
