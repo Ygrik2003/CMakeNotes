@@ -1,0 +1,190 @@
+@import "tailwindcss";
+@import "@fontsource-variable/source-serif-4/wght.css";
+@import "@fontsource-variable/source-serif-4/wght-italic.css";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/400-italic.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "katex/dist/katex.min.css";
+@import "@pagefind/default-ui/css/ui.css";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", "Source Serif 4", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", "SFMono-Regular", monospace;
+
+  --color-paper: #f3efe6;
+  --color-ink: #1c1915;
+  --color-muted: #5c574e;
+  --color-line: #d9d1c3;
+  --color-accent: #0f766e;
+  --color-accent-2: #115e59;
+  --color-card: #faf7f1;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+html {
+  color-scheme: light;
+  background: var(--color-paper);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #12151a;
+  --color-ink: #ece7dc;
+  --color-muted: #a8a396;
+  --color-line: #2a3038;
+  --color-accent: #2dd4bf;
+  --color-accent-2: #5eead4;
+  --color-card: #181c22;
+  background: var(--color-paper);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background:
+    radial-gradient(1200px 500px at 10% -10%, color-mix(in oklab, var(--color-accent) 12%, transparent), transparent 55%),
+    var(--color-paper);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-accent) 30%, white);
+  color: var(--color-ink);
+}
+
+a {
+  color: inherit;
+}
+
+.prose {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  font-optical-sizing: auto;
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  scroll-margin-top: 5rem;
+}
+
+.prose h2 {
+  font-size: 1.45rem;
+  margin: 2.2rem 0 0.8rem;
+}
+
+.prose h3 {
+  font-size: 1.15rem;
+  margin: 1.7rem 0 0.6rem;
+}
+
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 1rem 0;
+}
+
+.prose li + li {
+  margin-top: 0.35rem;
+}
+
+.prose a {
+  color: var(--color-accent-2);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  color: var(--color-accent);
+}
+
+.prose blockquote {
+  margin: 1.4rem 0;
+  padding: 0.2rem 0 0.2rem 1rem;
+  border-left: 3px solid var(--color-accent);
+  color: var(--color-muted);
+}
+
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  font-variant-ligatures: none;
+  background: color-mix(in oklab, var(--color-accent) 10%, var(--color-card));
+  padding: 0.12em 0.38em;
+  border-radius: 0.35rem;
+}
+
+.prose .expressive-code {
+  margin: 1.5rem 0;
+}
+
+.prose .expressive-code pre,
+.prose .expressive-code code {
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0, "liga" 0;
+}
+
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.4rem 0;
+  margin: 1.4rem 0;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  margin: 2rem 0;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+}
+
+.prose th,
+.prose td {
+  border-bottom: 1px solid var(--color-line);
+  padding: 0.45rem 0.5rem;
+  text-align: left;
+}
+
+/* Keep long generator expressions readable on phones without wrapping tokens. */
+.expressive-code .ec-frame,
+.expressive-code pre {
+  max-width: 100%;
+}
+
+.pagefind-ui {
+  --pagefind-ui-scale: 0.92;
+  --pagefind-ui-primary: var(--color-accent);
+  --pagefind-ui-text: var(--color-ink);
+  --pagefind-ui-background: var(--color-card);
+  --pagefind-ui-border: var(--color-line);
+  --pagefind-ui-font: var(--font-sans);
+}
+
+.pagefind-ui .pagefind-ui__search-input {
+  border-radius: 0.7rem;
+}

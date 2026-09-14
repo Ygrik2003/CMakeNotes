@@ -1,0 +1,36 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { href, localePaths, ui, type Locale } from '@/i18n/ui';
+import { allTags, getPosts, tagSlug } from '@/lib/posts';
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Locale;
+const copy = ui[lang];
+const tags = allTags(await getPosts(lang));
+---
+
+<BaseLayout lang={lang} title={copy.navTags} description={copy.tags}>
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <h1 class="font-sans text-3xl font-semibold tracking-tight">{copy.navTags}</h1>
+    {tags.length === 0 ? (
+      <p class="mt-4 text-[var(--color-muted)]">{copy.noTags}</p>
+    ) : (
+      <ul class="mt-8 flex flex-wrap gap-3">
+        {tags.map(([tag, count]) => (
+          <li>
+            <a
+              class="inline-flex items-center gap-2 rounded-full border border-[var(--color-line)] bg-[var(--color-card)] px-3 py-1.5 text-sm hover:border-[var(--color-accent)]"
+              href={href(lang, 'tags', tagSlug(tag))}
+            >
+              <span>#{tag}</span>
+              <span class="text-[var(--color-muted)]">{count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>

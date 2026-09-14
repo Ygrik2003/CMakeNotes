@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+import { site, type Locale } from '../i18n/ui';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description?: string;
+  translationHref?: string;
+}
+
+const { lang, title, description, translationHref } = Astro.props;
+const brand = site[lang];
+const pageTitle = title === brand.name ? brand.name : `${title} · ${brand.name}`;
+const desc = description ?? brand.description;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={desc} />
+    <meta name="theme-color" content="#0f766e" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={brand.name} href={`${import.meta.env.BASE_URL}${lang}/rss.xml`} />
+    {lang === 'ru' ? (
+      <link rel="alternate" hreflang="en" href={translationHref ?? canonical.toString().replace('/ru/', '/en/')} />
+    ) : (
+      <link rel="alternate" hreflang="ru" href={translationHref ?? canonical.toString().replace('/en/', '/ru/')} />
+    )}
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'ru' ? 'ru_RU' : 'en_US'} />
+    <title>{pageTitle}</title>
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme =
+            stored ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          /* ignore */
+        }
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <a
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-[var(--color-card)] focus:px-3 focus:py-2"
+      href="#content">{lang === 'ru' ? 'К содержанию' : 'Skip to content'}</a
+    >
+    <Header lang={lang} translationHref={translationHref} />
+    <main id="content" class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

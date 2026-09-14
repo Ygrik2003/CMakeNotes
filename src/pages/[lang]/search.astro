@@ -1,0 +1,97 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { href, localePaths, ui, type Locale } from '@/i18n/ui';
+import { getPosts, parsePostId } from '@/lib/posts';
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Locale;
+const copy = ui[lang];
+const posts = await getPosts(lang);
+const index = posts.map((post) => ({
+  title: post.data.title,
+  description: post.data.description,
+  tags: post.data.tags,
+  url: href(lang, 'posts', parsePostId(post.id).slug),
+  body: post.body ?? '',
+}));
+const isDev = import.meta.env.DEV;
+---
+
+<BaseLayout lang={lang} title={copy.navSearch} description={copy.searchHint}>
+  <section class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+    <h1 class="font-sans text-3xl font-semibold tracking-tight">{copy.navSearch}</h1>
+    <p class="mt-2 text-sm text-[var(--color-muted)]">{copy.searchHint}</p>
+
+    {isDev ? (
+      <div class="mt-8" data-search-root>
+        <label class="sr-only" for="local-search">{copy.navSearch}</label>
+        <input
+          id="local-search"
+          type="search"
+          placeholder={copy.searchPlaceholder}
+          class="w-full rounded-xl border border-[var(--color-line)] bg-[var(--color-card)] px-4 py-3 outline-none focus:border-[var(--color-accent)]"
+        />
+        <p id="search-status" class="mt-4 text-sm text-[var(--color-muted)]">{copy.searchEmpty}</p>
+        <ul id="search-results" class="mt-4 grid gap-3"></ul>
+      </div>
+    ) : (
+      <div class="mt-8" id="pagefind-search"></div>
+    )}
+  </section>
+</BaseLayout>
+
+{isDev && (
+  <script is:inline define:vars={{ index, empty: copy.searchEmpty, none: copy.searchNoResults }}>
+    const input = document.getElementById('local-search');
+    const results = document.getElementById('search-results');
+    const status = document.getElementById('search-status');
+
+    function haystack(item) {
+      return [item.title, item.description, item.tags.join(' '), item.body].join('\n').toLowerCase();
+    }
+
+    function render() {
+      const q = (input.value || '').trim().toLowerCase();
+      results.innerHTML = '';
+      if (!q) {
+        status.textContent = empty;
+        return;
+      }
+      const hits = index.filter((item) => haystack(item).includes(q)).slice(0, 20);
+      if (hits.length === 0) {
+        status.textContent = none;
+        return;
+      }
+      status.textContent = '';
+      for (const hit of hits) {
+        const li = document.createElement('li');
+        li.innerHTML =
+          '<a class="block rounded-xl border border-[var(--color-line)] bg-[var(--color-card)] p-4 hover:border-[var(--color-accent)]" href="' +
+          hit.url +
+          '"><span class="font-medium">' +
+          hit.title +
+          '</span><span class="mt-1 block text-sm text-[var(--color-muted)]">' +
+          hit.description +
+          '</span></a>';
+        results.appendChild(li);
+      }
+    }
+
+    input?.addEventListener('input', render);
+  </script>
+)}
+
+{!isDev && (
+  <script>
+    import { PagefindUI } from '@pagefind/default-ui';
+    new PagefindUI({
+      element: '#pagefind-search',
+      showImages: false,
+      bundlePath: `${import.meta.env.BASE_URL}pagefind/`,
+      showSubResults: true,
+    });
+  </script>
+)}

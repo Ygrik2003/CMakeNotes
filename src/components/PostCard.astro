@@ -1,0 +1,31 @@
+---
+import { formatDate, href, ui, type Locale } from '../i18n/ui';
+import { parsePostId, readingTime, type Post } from '../lib/posts';
+import TagList from './TagList.astro';
+
+interface Props {
+  lang: Locale;
+  post: Post;
+}
+
+const { lang, post } = Astro.props;
+const { slug } = parsePostId(post.id);
+const copy = ui[lang];
+const minutes = readingTime(post.body ?? '', lang);
+---
+
+<article class="rounded-2xl border border-[var(--color-line)] bg-[var(--color-card)] p-5 shadow-[0_1px_0_rgba(0,0,0,0.04)]">
+  <p class="text-xs text-[var(--color-muted)]">
+    <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, lang)}</time>
+    <span aria-hidden="true"> · </span>
+    <span>{copy.readingTime(minutes)}</span>
+  </p>
+  <h2 class="mt-2 font-sans text-xl font-semibold tracking-tight">
+    <a class="hover:text-[var(--color-accent-2)]" href={href(lang, 'posts', slug)}>{post.data.title}</a>
+  </h2>
+  <p class="mt-2 text-sm leading-6 text-[var(--color-muted)]">{post.data.description}</p>
+  <div class="mt-4 flex items-center justify-between gap-3">
+    <TagList lang={lang} tags={post.data.tags} />
+    <a class="shrink-0 text-sm font-medium text-[var(--color-accent-2)]" href={href(lang, 'posts', slug)}>{copy.readMore} →</a>
+  </div>
+</article>

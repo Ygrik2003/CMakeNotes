@@ -1,0 +1,78 @@
+---
+import { formatDate, href, otherLocale, ui, type Locale } from '../i18n/ui';
+import { parsePostId, readingTime, type Post } from '../lib/posts';
+import BaseLayout from './BaseLayout.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import TagList from '../components/TagList.astro';
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  lang: Locale;
+  post: Post;
+  headings: MarkdownHeading[];
+  translationHref?: string;
+  translationExists: boolean;
+  prev?: Post;
+  next?: Post;
+}
+
+const { lang, post, headings, translationHref, translationExists, prev, next } = Astro.props;
+const copy = ui[lang];
+const minutes = readingTime(post.body ?? '', lang);
+const other = otherLocale(lang);
+---
+
+<BaseLayout lang={lang} title={post.data.title} description={post.data.description} translationHref={translationHref}>
+  <article class="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-12" data-pagefind-body>
+    <div>
+      <p class="font-sans text-sm text-[var(--color-muted)]">
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, lang)}</time>
+        <span aria-hidden="true"> · </span>
+        <span>{copy.readingTime(minutes)}</span>
+        {post.data.draft && (
+          <>
+            <span aria-hidden="true"> · </span>
+            <span class="rounded-full border border-[var(--color-line)] px-2 py-0.5 text-xs uppercase tracking-wide">{copy.draft}</span>
+          </>
+        )}
+      </p>
+      <h1 class="mt-3 font-sans text-3xl font-semibold tracking-tight sm:text-4xl" data-pagefind-meta="title">
+        {post.data.title}
+      </h1>
+      <p class="mt-4 max-w-2xl text-[var(--color-muted)]">{post.data.description}</p>
+      <div class="mt-5">
+        <TagList lang={lang} tags={post.data.tags} />
+      </div>
+
+      {!translationExists && (
+        <p class="mt-6 rounded-lg border border-[var(--color-line)] bg-[var(--color-card)] px-4 py-3 text-sm">
+          {copy.translationMissing}
+          {' '}
+          <a class="text-[var(--color-accent-2)] underline underline-offset-2" href={href(other, 'posts')}>{ui[other].navPosts}</a>
+        </p>
+      )}
+
+      <div class="prose mt-10 max-w-3xl">
+        <slot />
+      </div>
+
+      {(prev || next) && (
+        <nav class="mt-14 grid gap-4 border-t border-[var(--color-line)] pt-6 sm:grid-cols-2" aria-label={lang === 'ru' ? 'Соседние статьи' : 'Adjacent notes'}>
+          {prev ? (
+            <a class="rounded-xl border border-[var(--color-line)] bg-[var(--color-card)] p-4 hover:border-[var(--color-accent)]" href={href(lang, 'posts', parsePostId(prev.id).slug)}>
+              <span class="block text-xs uppercase tracking-wide text-[var(--color-muted)]">{copy.prev}</span>
+              <span class="mt-1 block font-medium">{prev.data.title}</span>
+            </a>
+          ) : <span></span>}
+          {next && (
+            <a class="rounded-xl border border-[var(--color-line)] bg-[var(--color-card)] p-4 text-right hover:border-[var(--color-accent)]" href={href(lang, 'posts', parsePostId(next.id).slug)}>
+              <span class="block text-xs uppercase tracking-wide text-[var(--color-muted)]">{copy.next}</span>
+              <span class="mt-1 block font-medium">{next.data.title}</span>
+            </a>
+          )}
+        </nav>
+      )}
+    </div>
+    <TableOfContents lang={lang} headings={headings} />
+  </article>
+</BaseLayout>

@@ -1,0 +1,28 @@
+---
+import { ui, type Locale } from '../i18n/ui';
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  lang: Locale;
+  headings: MarkdownHeading[];
+}
+
+const { lang, headings } = Astro.props;
+const items = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const copy = ui[lang];
+---
+
+{items.length > 1 && (
+  <aside class="mt-10 hidden lg:mt-0 lg:block">
+    <nav class="sticky top-24 rounded-xl border border-[var(--color-line)] bg-[var(--color-card)] p-4 text-sm" aria-label={copy.toc}>
+      <p class="mb-3 font-sans text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">{copy.toc}</p>
+      <ol class="space-y-2">
+        {items.map((item) => (
+          <li class={item.depth === 3 ? 'pl-3' : ''}>
+            <a class="text-[var(--color-muted)] hover:text-[var(--color-ink)]" href={`#${item.slug}`}>{item.text}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  </aside>
+)}

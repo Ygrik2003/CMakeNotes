@@ -1,0 +1,74 @@
+---
+import { href, otherLocale, site, ui, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+  translationHref?: string;
+}
+
+const { lang, translationHref } = Astro.props;
+const copy = ui[lang];
+const brand = site[lang];
+const other = otherLocale(lang);
+const switchHref = translationHref ?? href(other);
+const links = [
+  { href: href(lang), label: copy.navHome },
+  { href: href(lang, 'posts'), label: copy.navPosts },
+  { href: href(lang, 'tags'), label: copy.navTags },
+  { href: href(lang, 'about'), label: copy.navAbout },
+  { href: href(lang, 'search'), label: copy.navSearch },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-[var(--color-line)] bg-[color-mix(in_oklab,var(--color-paper)_88%,transparent)] backdrop-blur-md">
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
+    <a href={href(lang)} class="flex items-center gap-2 font-sans text-sm font-semibold tracking-tight">
+      <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width="22" height="22" class="rounded-[5px]" />
+      <span>{brand.name}</span>
+    </a>
+    <nav class="flex flex-1 flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--color-muted)]">
+      {links.map((link) => (
+        <a class="hover:text-[var(--color-ink)]" href={link.href}>{link.label}</a>
+      ))}
+    </nav>
+    <div class="ml-auto flex items-center gap-2">
+      <a
+        class="rounded-md border border-[var(--color-line)] px-2.5 py-1 text-xs font-medium uppercase tracking-wide hover:border-[var(--color-accent)]"
+        href={switchHref}
+        hreflang={other}
+        lang={other}
+      >
+        {other.toUpperCase()}
+      </a>
+      <button
+        type="button"
+        id="theme-toggle"
+        class="rounded-md border border-[var(--color-line)] px-2.5 py-1 text-xs font-medium hover:border-[var(--color-accent)]"
+        aria-label={copy.theme}
+      >
+        <span class="theme-label-light">{copy.themeDark}</span>
+        <span class="theme-label-dark hidden">{copy.themeLight}</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const button = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+
+  function syncLabels() {
+    const dark = root.getAttribute('data-theme') === 'dark';
+    document.querySelectorAll('.theme-label-light').forEach((el) => el.classList.toggle('hidden', dark));
+    document.querySelectorAll('.theme-label-dark').forEach((el) => el.classList.toggle('hidden', !dark));
+  }
+
+  button?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    syncLabels();
+  });
+
+  syncLabels();
+</script>

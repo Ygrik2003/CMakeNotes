@@ -1,0 +1,24 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { localePaths, ui, type Locale } from '@/i18n/ui';
+import { getPosts } from '@/lib/posts';
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Locale;
+const copy = ui[lang];
+const posts = await getPosts(lang);
+---
+
+<BaseLayout lang={lang} title={copy.navPosts} description={copy.allPosts}>
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <h1 class="font-sans text-3xl font-semibold tracking-tight">{copy.navPosts}</h1>
+    <p class="mt-2 text-[var(--color-muted)]">{posts.length === 0 ? copy.noPosts : copy.allPosts}</p>
+    <div class="mt-8 grid gap-4">
+      {posts.map((post) => <PostCard lang={lang} post={post} />)}
+    </div>
+  </section>
+</BaseLayout>

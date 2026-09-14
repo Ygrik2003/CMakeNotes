@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { defaultLocale, href, ui } from '@/i18n/ui';
+
+const lang = defaultLocale;
+const copy = ui[lang];
+---
+
+<BaseLayout lang={lang} title={copy.notFound} description={copy.notFoundBody}>
+  <div class="mx-auto max-w-xl px-4 py-24 text-center">
+    <p class="font-mono text-sm text-[var(--color-accent)]">404</p>
+    <h1 class="mt-3 font-sans text-3xl font-semibold">{copy.notFound}</h1>
+    <p class="mt-3 text-[var(--color-muted)]">{copy.notFoundBody}</p>
+    <p class="mt-8 flex justify-center gap-4 text-sm">
+      <a class="text-[var(--color-accent-2)] underline underline-offset-2" href={href(lang)}>{copy.navHome}</a>
+      <a class="text-[var(--color-accent-2)] underline underline-offset-2" href={href(lang, 'posts')}>{copy.navPosts}</a>
+    </p>
+  </div>
+</BaseLayout>

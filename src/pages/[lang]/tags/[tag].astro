@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { href, locales, ui, type Locale } from '@/i18n/ui';
+import { allTags, getPosts, tagSlug } from '@/lib/posts';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of locales) {
+    const tags = allTags(await getPosts(lang));
+    for (const [tag] of tags) {
+      paths.push({ params: { lang, tag: tagSlug(tag) } });
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Locale;
+const tagParam = Astro.params.tag as string;
+const copy = ui[lang];
+const posts = (await getPosts(lang)).filter((post) => post.data.tags.some((tag) => tagSlug(tag) === tagParam));
+const tag = posts[0]?.data.tags.find((item) => tagSlug(item) === tagParam) ?? decodeURIComponent(tagParam);
+---
+
+<BaseLayout lang={lang} title={`${copy.tagged} #${tag}`} description={`${copy.tagged} ${tag}`}>
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <p class="text-sm text-[var(--color-muted)]">
+      <a class="hover:text-[var(--color-ink)]" href={href(lang, 'tags')}>{copy.navTags}</a>
+    </p>
+    <h1 class="mt-2 font-sans text-3xl font-semibold tracking-tight">{copy.tagged} <span class="text-[var(--color-accent)]">#{tag}</span></h1>
+    {posts.length === 0 ? (
+      <p class="mt-6 text-[var(--color-muted)]">{copy.noPostsTag}</p>
+    ) : (
+      <div class="mt-8 grid gap-4">
+        {posts.map((post) => <PostCard lang={lang} post={post} />)}
+      </div>
+    )}
+  </section>
+</BaseLayout>
