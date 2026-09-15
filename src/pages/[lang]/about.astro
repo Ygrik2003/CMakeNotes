@@ -24,7 +24,16 @@ const { Content } = await render(about);
 >
   <section class="mx-auto max-w-3xl px-4 py-12 sm:px-6" data-pagefind-body>
     <h1 class="font-sans text-3xl font-semibold tracking-tight">{about.data.title}</h1>
-    <div class="prose mt-8">
+    <div class="prose about-body mt-8">
+      {about.data.avatar && (
+        <img
+          src={about.data.avatar}
+          alt=""
+          width="160"
+          height="160"
+          class="about-avatar"
+        />
+      )}
       <Content />
     </div>
   </section>

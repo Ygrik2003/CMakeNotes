@@ -17,6 +17,7 @@ const about = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/about' }),
   schema: z.object({
     title: z.string(),
+    avatar: z.string().url().optional(),
   }),
 });
 
