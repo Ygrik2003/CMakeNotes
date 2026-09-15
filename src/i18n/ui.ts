@@ -5,15 +5,9 @@ export const defaultLocale: Locale = 'ru';
 export const site = {
   ru: {
     name: 'Заметки о CMake',
-    tagline: 'Практика сборки, без магии.',
-    description:
-      'Заметки про CMake, генераторы, Ninja и то, что обычно остаётся в комментариях к CMakeLists.txt.',
   },
   en: {
     name: 'CMake Notes',
-    tagline: 'Build system notes, no magic.',
-    description:
-      'Notes on CMake, generators, Ninja, and the parts that usually stay buried in CMakeLists.txt comments.',
   },
 } as const;
 

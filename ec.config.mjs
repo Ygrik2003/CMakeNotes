@@ -2,7 +2,7 @@ import { defineEcConfig } from 'astro-expressive-code';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 
 export default defineEcConfig({
-  themes: ['catppuccin-latte', 'catppuccin-mocha'],
+  themes: ['github-light', 'github-dark'],
   themeCssSelector: (theme) => `[data-theme='${theme.type}']`,
   useDarkModeMediaQuery: false,
   plugins: [pluginLineNumbers()],
@@ -18,7 +18,7 @@ export default defineEcConfig({
   styleOverrides: {
     codeFontFamily: "'IBM Plex Mono', ui-monospace, monospace",
     uiFontFamily: "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif",
-    borderRadius: '0.7rem',
+    borderRadius: '0.25rem',
     borderWidth: '1px',
     frames: {
       editorTabBarBackground: 'transparent',

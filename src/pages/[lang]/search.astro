@@ -22,7 +22,7 @@ const isDev = import.meta.env.DEV;
 
 <BaseLayout lang={lang} title={copy.navSearch} description={copy.searchHint}>
   <section class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-    <h1 class="font-sans text-3xl font-semibold tracking-tight">{copy.navSearch}</h1>
+    <h1 class="font-sans text-3xl font-medium tracking-tight">{copy.navSearch}</h1>
     <p class="mt-2 text-sm text-[var(--color-muted)]">{copy.searchHint}</p>
 
     {isDev ? (
@@ -32,10 +32,10 @@ const isDev = import.meta.env.DEV;
           id="local-search"
           type="search"
           placeholder={copy.searchPlaceholder}
-          class="w-full rounded-xl border border-[var(--color-line)] bg-[var(--color-card)] px-4 py-3 outline-none focus:border-[var(--color-accent)]"
+          class="w-full border-0 border-b border-[var(--color-line)] bg-transparent px-0 py-3 outline-none focus:border-[var(--color-ink)]"
         />
         <p id="search-status" class="mt-4 text-sm text-[var(--color-muted)]">{copy.searchEmpty}</p>
-        <ul id="search-results" class="mt-4 grid gap-3"></ul>
+        <ul id="search-results" class="mt-4 divide-y divide-[var(--color-line)]"></ul>
       </div>
     ) : (
       <div class="mt-8" id="pagefind-search"></div>
@@ -69,7 +69,7 @@ const isDev = import.meta.env.DEV;
       for (const hit of hits) {
         const li = document.createElement('li');
         li.innerHTML =
-          '<a class="block rounded-xl border border-[var(--color-line)] bg-[var(--color-card)] p-4 hover:border-[var(--color-accent)]" href="' +
+          '<a class="block py-4 hover:text-[var(--color-muted)]" href="' +
           hit.url +
           '"><span class="font-medium">' +
           hit.title +

@@ -11,8 +11,8 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-[var(--color-line)]">
-  <div class="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-6">
-    <p>© {year} {site[lang].name}.</p>
-    <a class="text-[var(--color-accent-2)] underline underline-offset-2" href={href(lang, 'rss.xml')}>{copy.rss}</a>
+  <div class="mx-auto flex max-w-3xl flex-col gap-2 px-4 py-6 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <p>© {year} {site[lang].name}</p>
+    <a class="hover:text-[var(--color-ink)]" href={href(lang, 'rss.xml')}>{copy.rss}</a>
   </div>
 </footer>

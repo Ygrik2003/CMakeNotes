@@ -23,7 +23,7 @@ const { Content } = await render(about);
   translationHref={href(otherLocale(lang), 'about')}
 >
   <section class="mx-auto max-w-3xl px-4 py-12 sm:px-6" data-pagefind-body>
-    <h1 class="font-sans text-3xl font-semibold tracking-tight">{about.data.title}</h1>
+    <h1 class="font-sans text-3xl font-medium tracking-tight">{about.data.title}</h1>
     <div class="prose about-body mt-8">
       {about.data.avatar && (
         <img

@@ -23,7 +23,7 @@ const other = otherLocale(lang);
 ---
 
 <BaseLayout lang={lang} title={post.data.title} description={post.data.description} translationHref={translationHref}>
-  <article class="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-12" data-pagefind-body>
+  <article class="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 lg:max-w-5xl lg:grid lg:grid-cols-[minmax(0,1fr)_12rem] lg:gap-12" data-pagefind-body>
     <div>
       <p class="font-sans text-sm text-[var(--color-muted)]">
         <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, lang)}</time>
@@ -32,23 +32,23 @@ const other = otherLocale(lang);
         {post.data.draft && (
           <>
             <span aria-hidden="true"> · </span>
-            <span class="rounded-full border border-[var(--color-line)] px-2 py-0.5 text-xs uppercase tracking-wide">{copy.draft}</span>
+            <span class="text-xs uppercase tracking-wide">{copy.draft}</span>
           </>
         )}
       </p>
-      <h1 class="mt-3 font-sans text-3xl font-semibold tracking-tight sm:text-4xl" data-pagefind-meta="title">
+      <h1 class="mt-3 font-sans text-3xl font-medium tracking-tight sm:text-4xl" data-pagefind-meta="title">
         {post.data.title}
       </h1>
       <p class="mt-4 max-w-2xl text-[var(--color-muted)]">{post.data.description}</p>
-      <div class="mt-5">
+      <div class="mt-4">
         <TagList lang={lang} tags={post.data.tags} />
       </div>
 
       {!translationExists && (
-        <p class="mt-6 rounded-lg border border-[var(--color-line)] bg-[var(--color-card)] px-4 py-3 text-sm">
+        <p class="mt-6 border-l border-[var(--color-line)] pl-4 text-sm text-[var(--color-muted)]">
           {copy.translationMissing}
           {' '}
-          <a class="text-[var(--color-accent-2)] underline underline-offset-2" href={href(other, 'posts')}>{ui[other].navPosts}</a>
+          <a class="underline underline-offset-2 hover:text-[var(--color-ink)]" href={href(other, 'posts')}>{ui[other].navPosts}</a>
         </p>
       )}
 
@@ -57,17 +57,17 @@ const other = otherLocale(lang);
       </div>
 
       {(prev || next) && (
-        <nav class="mt-14 grid gap-4 border-t border-[var(--color-line)] pt-6 sm:grid-cols-2" aria-label={lang === 'ru' ? 'Соседние статьи' : 'Adjacent notes'}>
+        <nav class="mt-14 grid gap-6 border-t border-[var(--color-line)] pt-6 sm:grid-cols-2" aria-label={lang === 'ru' ? 'Соседние статьи' : 'Adjacent notes'}>
           {prev ? (
-            <a class="rounded-xl border border-[var(--color-line)] bg-[var(--color-card)] p-4 hover:border-[var(--color-accent)]" href={href(lang, 'posts', parsePostId(prev.id).slug)}>
-              <span class="block text-xs uppercase tracking-wide text-[var(--color-muted)]">{copy.prev}</span>
-              <span class="mt-1 block font-medium">{prev.data.title}</span>
+            <a class="hover:text-[var(--color-muted)]" href={href(lang, 'posts', parsePostId(prev.id).slug)}>
+              <span class="block text-xs text-[var(--color-muted)]">{copy.prev}</span>
+              <span class="mt-1 block text-sm font-medium">{prev.data.title}</span>
             </a>
           ) : <span></span>}
           {next && (
-            <a class="rounded-xl border border-[var(--color-line)] bg-[var(--color-card)] p-4 text-right hover:border-[var(--color-accent)]" href={href(lang, 'posts', parsePostId(next.id).slug)}>
-              <span class="block text-xs uppercase tracking-wide text-[var(--color-muted)]">{copy.next}</span>
-              <span class="mt-1 block font-medium">{next.data.title}</span>
+            <a class="text-right hover:text-[var(--color-muted)]" href={href(lang, 'posts', parsePostId(next.id).slug)}>
+              <span class="block text-xs text-[var(--color-muted)]">{copy.next}</span>
+              <span class="mt-1 block text-sm font-medium">{next.data.title}</span>
             </a>
           )}
         </nav>
