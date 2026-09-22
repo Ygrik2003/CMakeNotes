@@ -14,7 +14,7 @@ interface Props {
 const { lang, title, description, translationHref } = Astro.props;
 const brand = site[lang];
 const pageTitle = title === brand.name ? brand.name : `${title} · ${brand.name}`;
-const desc = description ?? brand.name;
+const desc = description ?? brand.description;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 

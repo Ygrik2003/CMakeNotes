@@ -5,9 +5,11 @@ export const defaultLocale: Locale = 'ru';
 export const site = {
   ru: {
     name: 'Заметки о CMake',
+    description: 'Заметки про CMake, генераторы и сборку проектов.',
   },
   en: {
     name: 'CMake Notes',
+    description: 'Notes on CMake, generators, and project builds.',
   },
 } as const;
 
