@@ -19,8 +19,6 @@ const posts = (await getPosts(lang)).slice(0, 6);
     <h1 class="font-sans text-3xl font-medium tracking-tight sm:text-4xl">{brand.name}</h1>
     <p class="mt-6 text-sm">
       <a class="underline underline-offset-2 hover:text-[var(--color-muted)]" href={href(lang, 'posts')}>{copy.allPosts}</a>
-      <span class="mx-2 text-[var(--color-line)]">/</span>
-      <a class="underline underline-offset-2 hover:text-[var(--color-muted)]" href={href(lang, 'about')}>{copy.navAbout}</a>
     </p>
   </section>
 
